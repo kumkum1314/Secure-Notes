@@ -73,7 +73,7 @@ const Home = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 min-h-screen bg-gray-500 pb-28">
+    <div className="container mx-auto px-4 py-10 min-h-screen pb-28">
       {error && <p className="text-red-400 mb-4">{error}</p>}
       <NoteModal
         isOpen={isModalOpen}
@@ -84,41 +84,40 @@ const Home = () => {
         note={editNote}
         onSave={handleSaveNote}
       />
-      <button
-        onClick={() => setIsModalOpen(true)}
-        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-14 h-14 bg-gray-800 text-white text-3xl rounded-full shadow-lg hover:bg-gray-900 flex items-center justify-center"
-      >
-        <span className="flex items-center justify-center h-full w-full pb-1">
-          +
-        </span>
+      <button onClick={() => setIsModalOpen(true)} className="fab elevate text-2xl">
+        <span className="relative z-10 pb-1">+</span>
       </button>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {notes.map((note) => (
-          <div className="bg-gray-800 p-4 rounded-lg shadow-md break-words" key={note._id}>
-            <h3 className="text-lg font-medium text-white mb-2">
-              {note.title}
-            </h3>
-            <p className="text-gray-300 mb-4 whitespace-pre-wrap break-words">{note.description}</p>
-            <p className="text-sm text-gray-400 mb-4">
-              {new Date(note.updatedAt).toLocaleString()}
-            </p>
-            <div className="flex flex-wrap gap-2">
-              <button
-                onClick={() => handleEdit(note)}
-                className="bg-yellow-600 text-white px-3 py-1 rounded-md hover:bg-yellow-700"
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => handleDelete(note._id)}
-                className="bg-red-600 text-white px-3 py-1 rounded-md hover:bg-red-700"
-              >
-                Delete
-              </button>
-            </div>
+      {notes.length === 0 ? (
+        <div className="mt-20 text-center text-gray-300">
+          <div className="mx-auto w-full max-w-lg glass card p-8 elevate">
+            <h3 className="text-xl font-semibold mb-2">No notes yet</h3>
+            <p className="text-gray-400">Create your first note to get started.</p>
+            <button onClick={() => setIsModalOpen(true)} className="btn btn-primary mt-6">
+              New note
+            </button>
           </div>
-        ))}
-      </div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {notes.map((note) => (
+            <div className="card glass p-5 elevate break-words" key={note._id}>
+              <h3 className="text-lg font-semibold text-white mb-2">{note.title}</h3>
+              <p className="text-gray-300 mb-4 whitespace-pre-wrap break-words">{note.description}</p>
+              <p className="text-xs text-gray-400 mb-4">
+                {new Date(note.updatedAt).toLocaleString()}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                <button onClick={() => handleEdit(note)} className="btn btn-muted">
+                  Edit
+                </button>
+                <button onClick={() => handleDelete(note._id)} className="btn btn-danger">
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

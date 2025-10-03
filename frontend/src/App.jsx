@@ -29,13 +29,13 @@ function App() {
   }, []);
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-xl text-white">Loading...</div>
+      <div className="min-h-screen grid place-items-center">
+        <div className="glass card px-6 py-4 elevate text-white/90">Loading…</div>
       </div>
     );
   }
   return (
-    <div className="min-h-screen bg-gray-500">
+    <div className="min-h-screen">
       <Navbar user={user} setUser={setUser} />
       <Routes>
         <Route

@@ -23,31 +23,35 @@ const Navbar = ({ user, setUser }) => {
   };
 
   return (
-    <nav className="bg-gray-900 p-4 text-white shadow-lg">
-      <div className="container mx-auto flex flex-wrap items-center justify-between gap-3">
-        <Link to="/" className="font-semibold">Notes App</Link>
-        {user && (
-          <>
-            <div className="flex-1 min-w-[200px] max-w-sm w-full order-3 sm:order-none">
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search notes..."
-                className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-md outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-gray-300 font-medium truncate max-w-[140px] sm:max-w-none">{user.username}</span>
-              <button
-                onClick={handleLogout}
-                className="bg-red-600 text-white px-3 py-1 rounded-md hover:bg-red-700"
-              >
-                Logout
-              </button>
-            </div>
-          </>
-        )}
+    <nav className="sticky top-0 z-40 text-white/90">
+      <div className="bg-gradient-to-b from-black/40 to-black/10 backdrop-blur supports-backdrop-blur:bg-black/40">
+        <div className="container mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+          <Link to="/" className="flex items-center gap-2 font-semibold tracking-tight elevate">
+            <span className="inline-flex h-8 w-8 rounded-lg items-center justify-center bg-indigo-600 text-white shadow-lg">N</span>
+            <span className="text-lg">Notes</span>
+          </Link>
+          {user && (
+            <>
+              <div className="flex-1 min-w-[220px] max-w-md w-full order-3 sm:order-none">
+                <input
+                  type="text"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Search notes..."
+                  className="field"
+                />
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="text-sm text-gray-300/90 font-medium truncate max-w-[140px] sm:max-w-none">
+                  {user.username}
+                </span>
+                <button onClick={handleLogout} className="btn btn-danger">
+                  Logout
+                </button>
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </nav>
   );
