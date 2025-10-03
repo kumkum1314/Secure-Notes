@@ -9,6 +9,10 @@ const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editNote, setEditNote] = useState(null);
   const location = useLocation();
+  const total = notes.reduce(
+    (sum, n) => sum + (typeof n.amount === "number" ? n.amount : Number(n.amount) || 0),
+    0
+  );
 
   const fetchNotes = async () => {
     try {
@@ -98,25 +102,38 @@ const Home = () => {
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {notes.map((note) => (
-            <div className="card glass p-5 elevate break-words" key={note._id}>
-              <h3 className="text-lg font-semibold text-white mb-2">{note.title}</h3>
-              <p className="text-gray-300 mb-4 whitespace-pre-wrap break-words">{note.description}</p>
-              <p className="text-xs text-gray-400 mb-4">
-                {new Date(note.updatedAt).toLocaleString()}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                <button onClick={() => handleEdit(note)} className="btn btn-muted">
-                  Edit
-                </button>
-                <button onClick={() => handleDelete(note._id)} className="btn btn-danger">
-                  Delete
-                </button>
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {notes.map((note) => (
+              <div className="card glass p-5 elevate break-words" key={note._id}>
+                <h3 className="text-lg font-semibold text-white mb-2">{note.title}</h3>
+                {note.amount !== undefined && (
+                  <p className="text-indigo-300 font-semibold mb-2">₹ {Number(note.amount).toFixed(2)}</p>
+                )}
+                <p className="text-gray-300 mb-4 whitespace-pre-wrap break-words">{note.description}</p>
+                <p className="text-xs text-gray-400 mb-4">
+                  {new Date(note.updatedAt).toLocaleString()}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <button onClick={() => handleEdit(note)} className="btn btn-muted">
+                    Edit
+                  </button>
+                  <button onClick={() => handleDelete(note._id)} className="btn btn-danger">
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-8">
+            <div className="glass card p-5 elevate max-w-md">
+              <div className="flex items-center justify-between text-white/90 text-lg font-semibold">
+                <span>Total</span>
+                <span>₹ {total.toFixed(2)}</span>
               </div>
             </div>
-          ))}
-        </div>
+          </div>
+        </>
       )}
     </div>
   );

@@ -17,7 +17,7 @@ router.get("/", protect, async (req, res) => {
 
 // Create a note
 router.post("/", protect, async (req, res) => {
-  const { title, description } = req.body;
+  const { title, description, amount } = req.body;
   try {
     if (!title || !description) {
       return res.status(400).json({ message: "Please fill all the fields" });
@@ -25,6 +25,7 @@ router.post("/", protect, async (req, res) => {
     const note = await Note.create({
       title,
       description,
+      amount: typeof amount === "number" ? amount : Number(amount) || 0,
       createdBy: req.user._id,
     });
     res.status(201).json(note);
@@ -47,7 +48,7 @@ router.get("/:id", protect, async (req, res) => {
 
 // Update a note
 router.put("/:id", protect, async (req, res) => {
-  const { title, description } = req.body;
+  const { title, description, amount } = req.body;
   try {
     const note = await Note.findById(req.params.id);
     if (!note) {
@@ -60,9 +61,15 @@ router.put("/:id", protect, async (req, res) => {
 
     note.title = title || note.title;
     note.description = description || note.description;
+    if (amount !== undefined && amount !== null && amount !== "") {
+      const numericAmount = typeof amount === "number" ? amount : Number(amount);
+      if (!Number.isNaN(numericAmount) && numericAmount >= 0) {
+        note.amount = numericAmount;
+      }
+    }
 
-    const updatedCode = await note.save();
-    res.json(updatedCode);
+    const updatedNote = await note.save();
+    res.json(updatedNote);
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }

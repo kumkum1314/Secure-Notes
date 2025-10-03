@@ -4,11 +4,13 @@ import axios from "axios";
 const NoteModal = ({ isOpen, onClose, note, onSave }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [amount, setAmount] = useState("");
   const [error, setError] = useState("");
 
   useEffect(() => {
     setTitle(note ? note.title : "");
     setDescription(note ? note.description : "");
+    setAmount(note && typeof note.amount === "number" ? String(note.amount) : "");
     setError("");
   }, [note]);
 
@@ -21,7 +23,12 @@ const NoteModal = ({ isOpen, onClose, note, onSave }) => {
         return;
       }
 
-      const payload = { title, description };
+      const numericAmount = amount === "" ? 0 : Number(amount);
+      if (Number.isNaN(numericAmount) || numericAmount < 0) {
+        setError("Amount must be a non-negative number");
+        return;
+      }
+      const payload = { title, description, amount: numericAmount };
       const config = { headers: { Authorization: `Bearer ${token}` } };
       if (note) {
         const { data } = await axios.put(
@@ -37,6 +44,7 @@ const NoteModal = ({ isOpen, onClose, note, onSave }) => {
       setTitle("");
       setDescription("");
       setError("");
+      setAmount("");
       onClose();
     } catch (err) {
       console.log("Note save error");
@@ -61,6 +69,17 @@ const NoteModal = ({ isOpen, onClose, note, onSave }) => {
               placeholder="Note Title"
               className="field"
               required
+            />
+          </div>
+          <div>
+            <input
+              type="number"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              placeholder="Amount"
+              className="field"
+              min="0"
+              step="0.01"
             />
           </div>
           <div>
