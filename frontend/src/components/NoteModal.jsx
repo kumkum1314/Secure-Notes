@@ -73,7 +73,7 @@ const NoteModal = ({ isOpen, onClose, note, onSave }) => {
               required
             />
           </div>
-          <div className="flex space-x-2">
+          <div className="flex flex-wrap gap-2">
             <button
               type="submit"
               className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"

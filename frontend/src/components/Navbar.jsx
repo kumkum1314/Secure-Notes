@@ -24,11 +24,11 @@ const Navbar = ({ user, setUser }) => {
 
   return (
     <nav className="bg-gray-900 p-4 text-white shadow-lg">
-      <div className="container mx-auto flex items-center justify-between">
-        <Link to="/">Notes App</Link>
+      <div className="container mx-auto flex flex-wrap items-center justify-between gap-3">
+        <Link to="/" className="font-semibold">Notes App</Link>
         {user && (
           <>
-            <div>
+            <div className="flex-1 min-w-[200px] max-w-sm w-full order-3 sm:order-none">
               <input
                 type="text"
                 value={search}
@@ -38,7 +38,7 @@ const Navbar = ({ user, setUser }) => {
               />
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-gray-300 font-medium">{user.username}</span>
+              <span className="text-gray-300 font-medium truncate max-w-[140px] sm:max-w-none">{user.username}</span>
               <button
                 onClick={handleLogout}
                 className="bg-red-600 text-white px-3 py-1 rounded-md hover:bg-red-700"

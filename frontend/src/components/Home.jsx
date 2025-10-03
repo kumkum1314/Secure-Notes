@@ -73,7 +73,7 @@ const Home = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 min-h-screen bg-gray-500">
+    <div className="container mx-auto px-4 py-8 min-h-screen bg-gray-500 pb-28">
       {error && <p className="text-red-400 mb-4">{error}</p>}
       <NoteModal
         isOpen={isModalOpen}
@@ -86,23 +86,23 @@ const Home = () => {
       />
       <button
         onClick={() => setIsModalOpen(true)}
-        className="fixed bottom-6 right-6 w-14 h-14 bg-gray-800 text-white text-3xl rounded-full shadow-lg hover:bg-gray-900 flex items-center justify-center"
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-14 h-14 bg-gray-800 text-white text-3xl rounded-full shadow-lg hover:bg-gray-900 flex items-center justify-center"
       >
         <span className="flex items-center justify-center h-full w-full pb-1">
           +
         </span>
       </button>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {notes.map((note) => (
-          <div className="bg-gray-800 p-4 rounded-lg shadow-md" key={note._id}>
+          <div className="bg-gray-800 p-4 rounded-lg shadow-md break-words" key={note._id}>
             <h3 className="text-lg font-medium text-white mb-2">
               {note.title}
             </h3>
-            <p className="text-gray-300 mb-4">{note.description}</p>
+            <p className="text-gray-300 mb-4 whitespace-pre-wrap break-words">{note.description}</p>
             <p className="text-sm text-gray-400 mb-4">
               {new Date(note.updatedAt).toLocaleString()}
             </p>
-            <div className="flex space-x-2">
+            <div className="flex flex-wrap gap-2">
               <button
                 onClick={() => handleEdit(note)}
                 className="bg-yellow-600 text-white px-3 py-1 rounded-md hover:bg-yellow-700"
