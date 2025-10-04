@@ -24,11 +24,10 @@ const Navbar = ({ user, setUser }) => {
 
   return (
     <nav className="sticky top-0 z-40 text-white/90">
-      <div className="bg-gradient-to-b from-black/40 to-black/10 backdrop-blur supports-backdrop-blur:bg-black/40">
+      <div className="bg-indigo-700">
         <div className="container mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
-          <Link to="/" className="flex items-center gap-2 font-semibold tracking-tight elevate">
-            <span className="inline-flex h-8 w-8 rounded-lg items-center justify-center bg-indigo-600 text-white shadow-lg">N</span>
-            <span className="text-lg">Notes</span>
+          <Link to="/" className="flex items-center gap-2 font-semibold tracking-tight">
+            <span className="text-lg">Ledger</span>
           </Link>
           {user && (
             <>

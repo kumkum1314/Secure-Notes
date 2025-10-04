@@ -79,6 +79,13 @@ const Home = () => {
   return (
     <div className="container mx-auto px-4 py-10 min-h-screen pb-28">
       {error && <p className="text-red-400 mb-4">{error}</p>}
+      <div className="mb-6 rounded-lg border border-white/10 bg-gray-900/70 px-4 py-3">
+        <h2 className="text-xl font-semibold tracking-tight">Ledger</h2>
+        <div className="mt-2 grid grid-cols-2 text-sm text-gray-400">
+          <span>Amount</span>
+          <span>Description</span>
+        </div>
+      </div>
       <NoteModal
         isOpen={isModalOpen}
         onClose={() => {
@@ -102,38 +109,46 @@ const Home = () => {
           </div>
         </div>
       ) : (
-        <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {notes.map((note) => (
-              <div className="card glass p-5 elevate break-words" key={note._id}>
-                <h3 className="text-lg font-semibold text-white mb-2">{note.title}</h3>
-                {note.amount !== undefined && (
-                  <p className="text-indigo-300 font-semibold mb-2">₹ {Number(note.amount).toFixed(2)}</p>
-                )}
-                <p className="text-gray-300 mb-4 whitespace-pre-wrap break-words">{note.description}</p>
-                <p className="text-xs text-gray-400 mb-4">
-                  {new Date(note.updatedAt).toLocaleString()}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  <button onClick={() => handleEdit(note)} className="btn btn-muted">
-                    Edit
-                  </button>
-                  <button onClick={() => handleDelete(note._id)} className="btn btn-danger">
-                    Delete
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="mt-8">
-            <div className="glass card p-5 elevate max-w-md">
-              <div className="flex items-center justify-between text-white/90 text-lg font-semibold">
-                <span>Total</span>
-                <span>₹ {total.toFixed(2)}</span>
-              </div>
-            </div>
-          </div>
-        </>
+        <div className="glass card p-0 overflow-hidden">
+          <table className="w-full text-left">
+            <thead className="bg-black/40 text-gray-300">
+              <tr className="border-b border-white/10">
+                <th className="px-4 py-3 w-16">S.No</th>
+                <th className="px-4 py-3 w-40">Amount</th>
+                <th className="px-4 py-3">Description</th>
+                <th className="px-4 py-3 w-48 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {notes.map((note, idx) => (
+                <tr key={note._id} className="border-b border-white/10">
+                  <td className="px-4 py-4 align-top text-gray-400">{idx + 1}</td>
+                  <td className="px-4 py-4 align-top text-indigo-300 font-semibold">
+                    ₹ {Number(note.amount || 0).toFixed(2)}
+                  </td>
+                  <td className="px-4 py-4 align-top">
+                    <div className="text-white font-medium break-words">{note.title}</div>
+                    <div className="text-gray-300 whitespace-pre-wrap break-words">{note.description}</div>
+                    <div className="text-xs text-gray-500 mt-2">{new Date(note.updatedAt).toLocaleString()}</div>
+                  </td>
+                  <td className="px-4 py-4 align-top">
+                    <div className="flex justify-end gap-2">
+                      <button onClick={() => handleEdit(note)} className="btn btn-muted">Edit</button>
+                      <button onClick={() => handleDelete(note._id)} className="btn btn-danger">Delete</button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+            <tfoot>
+              <tr>
+                <td className="px-4 py-4 font-semibold text-white" colSpan="2">Total</td>
+                <td className="px-4 py-4 font-bold text-indigo-200">₹ {total.toFixed(2)}</td>
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       )}
     </div>
   );
