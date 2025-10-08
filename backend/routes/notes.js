@@ -17,15 +17,19 @@ router.get("/", protect, async (req, res) => {
 
 // Create a note
 router.post("/", protect, async (req, res) => {
-  const { title, description, amount } = req.body;
+  const { title, description, amount, type } = req.body;
   try {
-    if (!title || !description) {
+    if (!title || !description || !amount || !type) {
       return res.status(400).json({ message: "Please fill all the fields" });
+    }
+    if (!['credit', 'debit'].includes(type)) {
+      return res.status(400).json({ message: "Type must be either 'credit' or 'debit'" });
     }
     const note = await Note.create({
       title,
       description,
-      amount: typeof amount === "number" ? amount : Number(amount) || 0,
+      amount: typeof amount === "number" ? amount : Number(amount),
+      type,
       createdBy: req.user._id,
     });
     res.status(201).json(note);
@@ -48,7 +52,7 @@ router.get("/:id", protect, async (req, res) => {
 
 // Update a note
 router.put("/:id", protect, async (req, res) => {
-  const { title, description, amount } = req.body;
+  const { title, description, amount, type } = req.body;
   try {
     const note = await Note.findById(req.params.id);
     if (!note) {
@@ -66,6 +70,9 @@ router.put("/:id", protect, async (req, res) => {
       if (!Number.isNaN(numericAmount) && numericAmount >= 0) {
         note.amount = numericAmount;
       }
+    }
+    if (type && ['credit', 'debit'].includes(type)) {
+      note.type = type;
     }
 
     const updatedNote = await note.save();

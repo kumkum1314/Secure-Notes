@@ -12,9 +12,13 @@ const noteSchema = new mongoose.Schema(
     },
     amount: {
       type: Number,
-      required: false,
-      default: 0,
+      required: true,
       min: 0,
+    },
+    type: {
+      type: String,
+      enum: ['credit', 'debit'],
+      required: true,
     },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,

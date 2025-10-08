@@ -5,12 +5,14 @@ const NoteModal = ({ isOpen, onClose, note, onSave }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
+  const [type, setType] = useState("credit");
   const [error, setError] = useState("");
 
   useEffect(() => {
     setTitle(note ? note.title : "");
     setDescription(note ? note.description : "");
     setAmount(note && typeof note.amount === "number" ? String(note.amount) : "");
+    setType(note ? note.type : "credit");
     setError("");
   }, [note]);
 
@@ -28,7 +30,11 @@ const NoteModal = ({ isOpen, onClose, note, onSave }) => {
         setError("Amount must be a non-negative number");
         return;
       }
-      const payload = { title, description, amount: numericAmount };
+      if (!type || !['credit', 'debit'].includes(type)) {
+        setError("Please select a valid type (Credit or Debit)");
+        return;
+      }
+      const payload = { title, description, amount: numericAmount, type };
       const config = { headers: { Authorization: `Bearer ${token}` } };
       if (note) {
         const { data } = await axios.put(
@@ -45,6 +51,7 @@ const NoteModal = ({ isOpen, onClose, note, onSave }) => {
       setDescription("");
       setError("");
       setAmount("");
+      setType("credit");
       onClose();
     } catch (err) {
       console.log("Note save error");
@@ -80,7 +87,19 @@ const NoteModal = ({ isOpen, onClose, note, onSave }) => {
               className="field"
               min="0"
               step="0.01"
+              required
             />
+          </div>
+          <div>
+            <select
+              value={type}
+              onChange={(e) => setType(e.target.value)}
+              className="field"
+              required
+            >
+              <option value="credit">Credit</option>
+              <option value="debit">Debit</option>
+            </select>
           </div>
           <div>
             <textarea
